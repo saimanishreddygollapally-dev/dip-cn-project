@@ -1,7 +1,0 @@
-C:/Users/G SAI MANISH/OneDrive/Desktop/ai powered mock interview/build/CMakeFiles/dip.dir
-C:/Users/G SAI MANISH/OneDrive/Desktop/ai powered mock interview/build/CMakeFiles/net.dir
-C:/Users/G SAI MANISH/OneDrive/Desktop/ai powered mock interview/build/CMakeFiles/client.dir
-C:/Users/G SAI MANISH/OneDrive/Desktop/ai powered mock interview/build/CMakeFiles/server.dir
-C:/Users/G SAI MANISH/OneDrive/Desktop/ai powered mock interview/build/CMakeFiles/make_sample.dir
-C:/Users/G SAI MANISH/OneDrive/Desktop/ai powered mock interview/build/CMakeFiles/edit_cache.dir
-C:/Users/G SAI MANISH/OneDrive/Desktop/ai powered mock interview/build/CMakeFiles/rebuild_cache.dir

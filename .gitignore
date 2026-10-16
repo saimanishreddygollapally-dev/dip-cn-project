@@ -1,0 +1,45 @@
+# ==========================================
+# CMake & Build Artifacts
+# ==========================================
+# Ignore the entire build directory where binaries and object files live
+build/
+
+# Backup rules for common compiled binaries and library files
+*.exe
+*.out
+*.app
+*.a
+*.lib
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+
+# ==========================================
+# Runtime Logs & Generated Test Results
+# ==========================================
+# Ignore generated output files in the results directory
+results/*
+
+# Do NOT ignore the .gitkeep file so the folder structure remains in Git
+!results/.gitkeep
+
+# ==========================================
+# IDE & System Files (Optional but Recommended)
+# ==========================================
+# VS Code
+.vscode/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# CLion / IntelliJ
+.idea/
+cmake-build-*/
+
+# Windows system files
+Thumbs.db
+Desktop.ini
