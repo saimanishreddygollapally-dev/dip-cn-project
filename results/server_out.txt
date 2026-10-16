@@ -1,0 +1,14 @@
+TCP server listening on port 5000 ...
+Client connected.
+=== Received Metadata ===
+Width: 640
+Height: 480
+JPEG quality: 75
+JPEG bytes: 21761
+Reconstructed image size: 640 x 480
+Saved reconstructed image to: results\received.jpg
+=== Transfer Statistics (server) ===
+Bytes received: 21761
+Time: 3.99e-05 s
+Throughput: 4363.11 Mbps
+Server finished successfully.
