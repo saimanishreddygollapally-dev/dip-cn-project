@@ -41,6 +41,10 @@ double computeMSE(const cv::Mat& original, const cv::Mat& reconstructed);
 // Peak Signal-to-Noise Ratio in dB (from MSE).
 double computePSNR(double mse, double maxPixelValue = 255.0);
 
+// Structural Similarity (0-1 typical). Returns -1 if images cannot be compared.
+// This is a quality metric, not an exact perceptual judgment.
+double computeSSIM(const cv::Mat& original, const cv::Mat& reconstructed);
+
 // Convenience: print a short DIP summary for a grayscale analysis image.
 void printDipSummary(const cv::Mat& gray,
                      const int histogram[256],

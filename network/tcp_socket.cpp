@@ -7,7 +7,8 @@ bool netInit() {
     WSADATA wsaData;
     int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (result != 0) {
-        std::cerr << "WSAStartup failed: " << result << std::endl;
+        std::cerr << "WSAStartup failed: " << result
+                  << " (WSAGetLastError=" << WSAGetLastError() << ")" << std::endl;
         return false;
     }
     return true;

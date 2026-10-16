@@ -4,6 +4,8 @@
 #include <iostream>
 #include <stdexcept>
 
+#include <opencv2/quality.hpp>
+
 cv::Mat loadImage(const std::string& path) {
     cv::Mat image = cv::imread(path, cv::IMREAD_COLOR);
     if (image.empty()) {
@@ -174,6 +176,28 @@ double computePSNR(double mse, double maxPixelValue) {
         return 99.0; // essentially identical images
     }
     return 10.0 * std::log10((maxPixelValue * maxPixelValue) / mse);
+}
+
+double computeSSIM(const cv::Mat& original, const cv::Mat& reconstructed) {
+    if (original.empty() || reconstructed.empty()) {
+        return -1.0;
+    }
+    if (original.size() != reconstructed.size()) {
+        return -1.0;
+    }
+
+    cv::Mat a = original;
+    cv::Mat b = reconstructed;
+    if (a.channels() != b.channels()) {
+        return -1.0;
+    }
+    if (a.channels() != 1) {
+        a = toGrayscale(a);
+        b = toGrayscale(b);
+    }
+
+    cv::Scalar s = cv::quality::QualitySSIM::compute(a, b, cv::noArray());
+    return s[0];
 }
 
 void printDipSummary(const cv::Mat& gray,

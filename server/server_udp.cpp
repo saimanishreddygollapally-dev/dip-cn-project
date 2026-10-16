@@ -70,8 +70,15 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    std::string boundIp;
+    uint16_t boundPort = 0;
+    if (getUdpLocalEndpoint(sock, boundIp, boundPort)) {
+        std::cout << "UDP server bound to " << boundIp << ":" << boundPort
+                  << " (INADDR_ANY, all IPv4 interfaces)" << std::endl;
+    }
     std::cout << "UDP server listening on port " << port << " ..." << std::endl;
     std::cout << "Idle timeout: " << timeoutMs << " ms" << std::endl;
+    std::cout.flush();
 
     const int kMaxDatagram = PKT_HEADER_SIZE + PKT_MAX_PAYLOAD + 16;
     std::vector<unsigned char> recvBuf(kMaxDatagram);

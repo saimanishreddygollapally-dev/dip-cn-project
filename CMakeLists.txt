@@ -13,6 +13,7 @@ find_package(OpenCV REQUIRED)
 
 add_library(dip STATIC
     dip/image_processing.cpp
+    dip/adaptive.cpp
 )
 target_include_directories(dip PUBLIC
     ${CMAKE_SOURCE_DIR}/dip
@@ -25,6 +26,7 @@ add_library(net STATIC
     network/udp_socket.cpp
     network/packet.cpp
     network/impair.cpp
+    network/reliable_transfer.cpp
 )
 target_include_directories(net PUBLIC
     ${CMAKE_SOURCE_DIR}/network
@@ -75,6 +77,35 @@ add_executable(make_sample
 )
 target_link_libraries(make_sample PRIVATE ${OpenCV_LIBS})
 
+add_executable(client_reliable
+    client/client_reliable.cpp
+    network/stream_session.cpp
+)
+target_include_directories(client_reliable PRIVATE
+    ${CMAKE_SOURCE_DIR}/dip
+    ${CMAKE_SOURCE_DIR}/network
+)
+target_link_libraries(client_reliable PRIVATE dip net ${OpenCV_LIBS})
+
+add_executable(server_reliable
+    server/server_reliable.cpp
+)
+target_include_directories(server_reliable PRIVATE
+    ${CMAKE_SOURCE_DIR}/dip
+    ${CMAKE_SOURCE_DIR}/network
+)
+target_link_libraries(server_reliable PRIVATE dip net ${OpenCV_LIBS})
+
+add_executable(benchmark
+    tools/benchmark.cpp
+    network/stream_session.cpp
+)
+target_include_directories(benchmark PRIVATE
+    ${CMAKE_SOURCE_DIR}/dip
+    ${CMAKE_SOURCE_DIR}/network
+)
+target_link_libraries(benchmark PRIVATE dip net ${OpenCV_LIBS})
+
 # Sends malformed UDP packets for checksum/header rejection tests.
 add_executable(send_bad_udp
     tools/send_bad_udp.cpp
@@ -83,6 +114,14 @@ target_include_directories(send_bad_udp PRIVATE
     ${CMAKE_SOURCE_DIR}/network
 )
 target_link_libraries(send_bad_udp PRIVATE net)
+
+add_executable(ssim_check
+    tools/ssim_check.cpp
+)
+target_include_directories(ssim_check PRIVATE
+    ${CMAKE_SOURCE_DIR}/dip
+)
+target_link_libraries(ssim_check PRIVATE dip ${OpenCV_LIBS})
 
 message(STATUS "OpenCV version: ${OpenCV_VERSION}")
 message(STATUS "OpenCV include: ${OpenCV_INCLUDE_DIRS}")

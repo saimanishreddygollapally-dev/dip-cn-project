@@ -27,12 +27,14 @@ struct ImpairConfig {
     double bandwidth_kbps;
     int reorder_window;
     unsigned int seed;
+    double ack_loss_percent; // 0-100; Day 3 ACK/NACK drops only
 };
 
 struct ImpairStats {
     int generated;
     int sent;
     int dropped;
+    int acks_dropped;
 };
 
 void impairInit(const ImpairConfig& config);
@@ -56,5 +58,19 @@ bool impairFlush(SocketHandle sock,
                  const std::string& host,
                  uint16_t port,
                  ImpairStats& stats);
+
+// Retransmit DATA with the same loss/reorder rules (not a new generated packet).
+bool impairRetransmitData(SocketHandle sock,
+                          const std::vector<unsigned char>& datagram,
+                          const std::string& host,
+                          uint16_t port,
+                          ImpairStats& stats);
+
+// ACK/NACK path. May drop using ack_loss_percent.
+bool impairSendAck(SocketHandle sock,
+                   const std::vector<unsigned char>& datagram,
+                   const std::string& host,
+                   uint16_t port,
+                   ImpairStats& stats);
 
 #endif // IMPAIR_H

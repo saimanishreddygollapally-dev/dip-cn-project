@@ -87,7 +87,8 @@ bool decodePacket(const unsigned char* data, int length, Packet& out) {
     if (reserved != 0) {
         return false;
     }
-    if (type != PKT_START && type != PKT_DATA && type != PKT_END) {
+    if (type != PKT_START && type != PKT_DATA && type != PKT_END &&
+        type != PKT_ACK && type != PKT_NACK) {
         return false;
     }
 

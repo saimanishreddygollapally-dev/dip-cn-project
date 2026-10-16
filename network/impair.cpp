@@ -68,6 +68,9 @@ bool flushOneRandom(SocketHandle sock,
 
 void impairInit(const ImpairConfig& config) {
     g_config = config;
+    if (g_config.ack_loss_percent < 0.0) {
+        g_config.ack_loss_percent = 0.0;
+    }
     g_hold.clear();
     g_inited = true;
     srand(g_config.seed);
@@ -118,4 +121,31 @@ bool impairFlush(SocketHandle sock,
         }
     }
     return true;
+}
+
+bool impairRetransmitData(SocketHandle sock,
+                          const std::vector<unsigned char>& datagram,
+                          const std::string& host,
+                          uint16_t port,
+                          ImpairStats& stats) {
+    int before = stats.generated;
+    bool ok = impairSendData(sock, datagram, host, port, stats);
+    stats.generated = before;
+    return ok;
+}
+
+bool impairSendAck(SocketHandle sock,
+                   const std::vector<unsigned char>& datagram,
+                   const std::string& host,
+                   uint16_t port,
+                   ImpairStats& stats) {
+    if (g_config.ack_loss_percent > 0.0) {
+        int r = rand() % 10000;
+        int threshold = static_cast<int>(g_config.ack_loss_percent * 100.0);
+        if (r < threshold) {
+            stats.acks_dropped++;
+            return true;
+        }
+    }
+    return sendNow(sock, datagram, host, port, stats);
 }

@@ -61,6 +61,7 @@ int main(int argc, char* argv[]) {
         impair.bandwidth_kbps = (argc >= 9) ? parseDouble(argv[8], "bandwidth_kbps", 0.0, 1000000.0) : 0.0;
         impair.reorder_window = (argc >= 10) ? parseInt(argv[9], "reorder_window", 0, 64) : 0;
         impair.seed = (argc >= 11) ? static_cast<unsigned int>(parseInt(argv[10], "seed", 0, 2000000000)) : 1u;
+        impair.ack_loss_percent = 0.0;
 
         const int outWidth = 640;
         const int outHeight = 480;
@@ -108,12 +109,20 @@ int main(int argc, char* argv[]) {
             netCleanup();
             return 1;
         }
+        if (!bindUdpForDestination(sock, host)) {
+            closeSocket(sock);
+            netCleanup();
+            return 1;
+        }
+
+        std::cout << "Sending UDP datagrams to " << host << ":" << port << std::endl;
 
         impairInit(impair);
         ImpairStats stats;
         stats.generated = 0;
         stats.sent = 0;
         stats.dropped = 0;
+        stats.acks_dropped = 0;
 
         StartInfo startInfo;
         startInfo.width = static_cast<uint32_t>(outWidth);

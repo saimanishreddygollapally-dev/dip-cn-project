@@ -32,6 +32,11 @@ const uint32_t PKT_MAGIC = 0x41495354u;
 const uint8_t PKT_START = 1;
 const uint8_t PKT_DATA = 2;
 const uint8_t PKT_END = 3;
+// Day 3 control messages use the same header. Day 2 senders never emit them.
+const uint8_t PKT_ACK = 4;
+const uint8_t PKT_NACK = 5;
+const uint32_t SEQ_ACK_START = 0xFFFFFFFFu;
+const uint32_t SEQ_ACK_END = 0xFFFFFFFEu;
 const int PKT_HEADER_SIZE = 24;
 const int PKT_START_PAYLOAD_SIZE = 16;
 const int PKT_MAX_PAYLOAD = 1400;
