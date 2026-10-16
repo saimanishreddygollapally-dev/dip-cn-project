@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(adaptive_image_streaming_day1 LANGUAGES CXX)
+project(adaptive_image_streaming LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -22,6 +22,9 @@ target_link_libraries(dip PUBLIC ${OpenCV_LIBS})
 
 add_library(net STATIC
     network/tcp_socket.cpp
+    network/udp_socket.cpp
+    network/packet.cpp
+    network/impair.cpp
 )
 target_include_directories(net PUBLIC
     ${CMAKE_SOURCE_DIR}/network
@@ -48,11 +51,38 @@ target_include_directories(server PRIVATE
 )
 target_link_libraries(server PRIVATE dip net ${OpenCV_LIBS})
 
+add_executable(client_udp
+    client/client_udp.cpp
+)
+target_include_directories(client_udp PRIVATE
+    ${CMAKE_SOURCE_DIR}/dip
+    ${CMAKE_SOURCE_DIR}/network
+)
+target_link_libraries(client_udp PRIVATE dip net ${OpenCV_LIBS})
+
+add_executable(server_udp
+    server/server_udp.cpp
+)
+target_include_directories(server_udp PRIVATE
+    ${CMAKE_SOURCE_DIR}/dip
+    ${CMAKE_SOURCE_DIR}/network
+)
+target_link_libraries(server_udp PRIVATE dip net ${OpenCV_LIBS})
+
 # Tiny helper used only to create a sample image for localhost testing.
 add_executable(make_sample
     tools/make_sample.cpp
 )
 target_link_libraries(make_sample PRIVATE ${OpenCV_LIBS})
+
+# Sends malformed UDP packets for checksum/header rejection tests.
+add_executable(send_bad_udp
+    tools/send_bad_udp.cpp
+)
+target_include_directories(send_bad_udp PRIVATE
+    ${CMAKE_SOURCE_DIR}/network
+)
+target_link_libraries(send_bad_udp PRIVATE net)
 
 message(STATUS "OpenCV version: ${OpenCV_VERSION}")
 message(STATUS "OpenCV include: ${OpenCV_INCLUDE_DIRS}")
